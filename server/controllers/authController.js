@@ -18,9 +18,9 @@ strategies.local = {
   signup: (req, res, next) => {
     bcrypt.hash(req.body.password, 5, (err, hash) =>{
       db.users.create({email: req.body.email, password: hash})
-      .then(data => {
-          console.log(data);
-          next(req, res);
+      .then((data, err) => {
+          console.log(data, err);
+          next();
       });
     });
   }
