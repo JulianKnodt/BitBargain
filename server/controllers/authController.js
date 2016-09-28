@@ -7,13 +7,12 @@ const bcrypt = require('bcrypt');
 const strategies = {};
 
 strategies.local = {
-  login: (req, res) => {
+  login: (req, res, next) => {
     db.users.getByEmail(req.body.email)
     .then(data => {
-      console.log('Data is', data[0]);
       bcrypt.compare(req.body.password, data[0].password, (err, same) => {
         if (same) {
-          res.send(JSON.stringify('User Logged in'));
+          next();
         } else {
           res.send(JSON.stringify('Incorrect Username or password'));
         }
@@ -24,7 +23,7 @@ strategies.local = {
     });
   },
   signup: (req, res, next) => {
-    bcrypt.hash(req.body.password, 5, (err, hash) =>{
+    bcrypt.hash(req.body.password, 7, (err, hash) =>{
       db.users.create({email: req.body.email, password: hash})
       .then(data => {
           next();
