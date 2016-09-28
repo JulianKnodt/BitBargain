@@ -16,11 +16,11 @@ strategies.local = {
     });
   },
   signup: (req, res, next) => {
-    bcrypt.hash(req.query.password, 5, (err, hash) =>{
-      db.users.create({email: req.query.email, password: hash})
+    bcrypt.hash(req.body.password, 5, (err, hash) =>{
+      db.users.create({email: req.body.email, password: hash})
       .then(data => {
           console.log(data);
-          res.send(JSON.stringify('O K'));
+          next(req, res);
       });
     });
   }
